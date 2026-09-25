@@ -280,3 +280,36 @@ ffmpeg -i build/audio/mix.wav -af volumedetect -f null /dev/null 2>&1 | grep vol
 ```
 
 **新版本一律另存，不覆盖旧版本**（V1 → V2 → V3 全部保留，随时可对比回退）。
+
+---
+
+## 九、跨 harness 使用
+
+**本 skill 不挑 harness** —— 技能本体是纯脚本（shell / node / python），不调用任何 agent 专有 API；
+`SKILL.md` 只依赖各家都认的 `name` + `description` 两个字段。
+
+但**各 harness 的 skill 目录是各自独立的**，所以要在「你实际会用的那家」目录里放一份。
+**推荐用软链**（改源码后所有 harness 同时生效，不会版本发散）：
+
+```bash
+# -n 很重要：目标已是软链时直接替换，不会套娃
+for DIR in ~/.agents/skills ~/.claude/skills ~/.kimi-code/skills ~/.codex/skills \
+           ~/.qwen/skills ~/.cursor/skills ~/.qoder/skills; do
+  [ -d "$DIR" ] && ln -sfn "<本技能的绝对路径>" "$DIR/live-video" && echo "✓ $DIR"
+done
+```
+
+常见位置（**仅供参考，别照抄**）：
+
+| harness | skill 目录 |
+|---|---|
+| dsh | `~/.agents/skills/`（可用 `DSH_AGENTS_HOME` 覆盖）；也扫 `~/.dsh/skills/` |
+| Claude Code | `~/.claude/skills/` |
+| Kimi Code | `~/.kimi-code/skills/`（旧版 `~/.kimi/skills/`）|
+| Codex | `~/.codex/skills/` |
+| Qwen / Cursor / Qoder / Trae | `~/.<名字>/skills/` |
+| OpenCode | `~/.config/opencode/skills/` |
+
+> **同事的环境布局可能和你不一样** —— 先探测再装。
+> **探测方法、三种安装方式、验证与排查表**，见
+> **[`references/各harness安装指引.md`](./references/各harness安装指引.md)**。

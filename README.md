@@ -23,15 +23,28 @@
 
 ## 安装
 
-```bash
-# 方式一：skills CLI
-npx skills add git@git.jiker-inc.com:skills/live-video.git
+**本 skill 不挑 harness** —— dsh / Claude Code / Kimi Code / Codex / Cursor / Qwen / Qoder / Trae / OpenCode
+都能用。技能本体是纯脚本，`SKILL.md` 只依赖各家都认的 `name` + `description`。
 
-# 方式二：手动 —— 克隆后软链到 skills 目录
+但**各家的 skill 目录是各自独立的**，需要在你要用的那家目录里放一份（推荐软链）：
+
+```bash
+# 1) 拿源码
 git clone git@git.jiker-inc.com:skills/live-video.git ~/Documents/codes/skills/Live-Video
-ln -s ~/Documents/codes/skills/Live-Video ~/.agents/skills/live-video
-ln -s ~/Documents/codes/skills/Live-Video ~/.claude/skills/live-video
+
+# 2) 给每个要用的 harness 建软链（-n 避免套娃）
+for DIR in ~/.agents/skills ~/.claude/skills ~/.kimi-code/skills ~/.codex/skills \
+           ~/.qwen/skills ~/.cursor/skills ~/.qoder/skills; do
+  [ -d "$DIR" ] && ln -sfn ~/Documents/codes/skills/Live-Video "$DIR/live-video" && echo "✓ $DIR"
+done
+
+# 3) 或者用 skills CLI
+npx skills add git@git.jiker-inc.com:skills/live-video.git
 ```
+
+> **同事的环境布局可能不同** —— 先探测再装。
+> 详见 **[references/各harness安装指引.md](./references/各harness安装指引.md)**：
+> 探测脚本、三种安装方式、验证步骤、排查表。
 
 ## 环境依赖
 
@@ -95,6 +108,7 @@ Live-Video/
 │   └── 演示页-模板.html         最小可运行模板（3 幕）
 └── references/
     ├── 制作标准.md             完整标准 + 18 条踩坑清单
+    ├── 各harness安装指引.md    跨 harness 安装 / 探测 / 验证 / 排查
     └── 工具包说明.md           各脚本的作用与参数
 ```
 
