@@ -330,8 +330,17 @@ done
 ```text
 帮我装一下 live-video 这个 Agent Skill，装到「当前项目的 .agents/skills/」下面
 （不要装到全局，那样会要权限）。
-来源：https://github.com/ice5kysl/live-video
-装完跑一次 scripts/check-env.sh 确认环境没问题，然后简单告诉我怎么用。
+
+两条路，哪条通用哪条（建议先试 npm）：
+
+  A) npm（推荐，公司网络一般更通）：
+     npm i @ice5kysl/live-video && npx @ice5kysl/live-video link --project
+
+  B) git clone（npm 不通时用）：
+     git clone --depth 1 https://github.com/ice5kysl/live-video.git .agents/skills/live-video
+
+装完跑一次 .agents/skills/live-video/scripts/check-env.sh 确认环境没问题，
+然后简单告诉我怎么用。
 ```
 
 **为什么强调"装到当前项目"**：装进工作区**不触发沙箱审批**（工作区内写入是放行的）；
@@ -342,9 +351,17 @@ done
 ### 或者一行终端命令
 
 ```bash
+# npm（推荐，公司网络一般比 GitHub 通）
+npm i @ice5kysl/live-video && npx @ice5kysl/live-video link --project
+
+# curl 兜底
 curl -fsSL https://raw.githubusercontent.com/ice5kysl/live-video/main/install.sh | bash
 # 加 -s -- --user 则装到全局
 ```
+
+> **⚠️ `npm i` 单独用是不够的** —— 它装进 `node_modules/`，而 dsh 只扫
+> `<项目根>/.agents/skills/`、`<项目根>/.dsh/skills/`、`~/.agents/skills/`、`~/.dsh/skills/`。
+> 必须再跑 `link --project` 落位。
 
 ### 装完必须做的一件事
 

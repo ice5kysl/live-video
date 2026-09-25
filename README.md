@@ -30,11 +30,18 @@
 ```text
 帮我装一下 live-video 这个 Agent Skill，装到「当前项目的 .agents/skills/」下面
 （不要装到全局，那样会要权限）。
-来源：https://github.com/ice5kysl/live-video
-装完跑一次 scripts/check-env.sh 确认环境没问题，然后简单告诉我怎么用。
-```
 
-助手会自己克隆、放好位置、跑环境自检。**你什么都不用做，只需要在它请求权限时点同意。**
+两条路，哪条通用哪条（建议先试 npm）：
+
+  A) npm（推荐，公司网络一般更通）：
+     npm i @ice5kysl/live-video && npx @ice5kysl/live-video link --project
+
+  B) git clone（npm 不通时用）：
+     git clone --depth 1 https://github.com/ice5kysl/live-video.git .agents/skills/live-video
+
+装完跑一次 .agents/skills/live-video/scripts/check-env.sh 确认环境没问题，
+然后简单告诉我怎么用。
+```
 
 > **为什么强调"装到当前项目"**：dsh 会扫描 `<项目根>/.agents/skills/`，
 > 装在这里**在工作区内，不需要额外授权**；装到全局（`~/.agents/skills/`）会触发沙箱审批。
@@ -52,15 +59,16 @@ curl -fsSL https://raw.githubusercontent.com/ice5kysl/live-video/main/install.sh
 curl -fsSL https://raw.githubusercontent.com/ice5kysl/live-video/main/install.sh | bash -s -- --user
 ```
 
-### 方式三：npm / skills CLI
+### 方式三：npm（自己动手的话）
 
 ```bash
 npm i @ice5kysl/live-video
-npx @ice5kysl/live-video link      # 自动软链到本机所有 harness
-
-# 或者
-npx skills add ice5kysl/live-video
+npx @ice5kysl/live-video link --project   # 复制到「当前项目」的 .agents/skills/
+npx @ice5kysl/live-video link --global    # 或软链到本机所有 harness（要家目录权限）
 ```
+
+> ⚠️ **`npm i` 本身不够** —— 它装进 `node_modules/`，而 dsh **不扫那个目录**。
+> 必须再跑一次 `link --project` 把技能落位到 `.agents/skills/`，dsh 才看得到。
 
 ### 装完怎么确认
 
