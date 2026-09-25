@@ -105,7 +105,7 @@ find ~ -maxdepth 4 -type d -name skills 2>/dev/null | grep -v Library | sort
 
 ```bash
 # 1) 拿到源码
-git clone git@git.jiker-inc.com:skills/live-video.git ~/Documents/codes/skills/Live-Video
+git clone <仓库地址> ~/Documents/codes/skills/Live-Video
 
 # 2) 给每个你要用的 harness 建软链（把 <DIR> 换成第三节探测到的目录）
 for DIR in ~/.agents/skills ~/.claude/skills ~/.kimi-code/skills ~/.codex/skills \
@@ -119,7 +119,7 @@ done
 ### 方式 B：skills CLI（如果你们的 skill 生态支持）
 
 ```bash
-npx skills add git@git.jiker-inc.com:skills/live-video.git
+npx skills add <仓库地址>
 ```
 
 ### 方式 C：直接拷贝（最简单，但**改源码后各份不会同步**）
