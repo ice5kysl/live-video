@@ -1,18 +1,38 @@
 {
   "name": "@ice5kysl/live-video",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Live-Video —— 把 HTML 页面做成汇报级演示视频的 Agent Skill：网页当画面 + TTS 旁白 + 无头浏览器逐帧录屏，改一句台词改一行代码就能重出",
   "keywords": [
-    "agent-skill", "skill", "claude-code", "dsh", "kimi-code", "codex", "cursor",
-    "video", "demo-video", "explainer-video", "html-to-video", "screencast",
-    "tts", "ffmpeg", "subtitle", "presentation"
+    "agent-skill",
+    "skill",
+    "claude-code",
+    "dsh",
+    "kimi-code",
+    "codex",
+    "cursor",
+    "video",
+    "demo-video",
+    "explainer-video",
+    "html-to-video",
+    "screencast",
+    "tts",
+    "ffmpeg",
+    "subtitle",
+    "presentation"
   ],
   "homepage": "https://github.com/ice5kysl/live-video",
-  "repository": { "type": "git", "url": "git+https://github.com/ice5kysl/live-video.git" },
-  "bugs": { "url": "https://github.com/ice5kysl/live-video/issues" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ice5kysl/live-video.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ice5kysl/live-video/issues"
+  },
   "license": "MIT",
   "author": "ice5kysl",
-  "bin": { "live-video": "bin/live-video.js" },
+  "bin": {
+    "live-video": "bin/live-video.js"
+  },
   "files": [
     "SKILL.md",
     "manifest.json",
@@ -23,6 +43,12 @@
     "templates/",
     "references/"
   ],
-  "engines": { "node": ">=18" },
-  "os": ["darwin", "linux", "win32"]
+  "engines": {
+    "node": ">=18"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ]
 }

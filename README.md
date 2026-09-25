@@ -21,7 +21,68 @@
 典型产出：方案汇报插片、产品演示、概念讲解、流程/数据看板讲解等，
 以「讲解 + 图示」为主的短片（**30 秒 ~ 3 分钟**）。
 
-## 安装
+## 🚀 30 秒装上（不用懂技术）
+
+### 方式一：直接跟你的 AI 助手说一句话 ⭐ 最推荐
+
+把下面这段**原样复制**发给你的 dsh / Claude Code：
+
+```text
+帮我装一下 live-video 这个 Agent Skill，装到「当前项目的 .agents/skills/」下面
+（不要装到全局，那样会要权限）。
+来源：https://github.com/ice5kysl/live-video
+装完跑一次 scripts/check-env.sh 确认环境没问题，然后简单告诉我怎么用。
+```
+
+助手会自己克隆、放好位置、跑环境自检。**你什么都不用做，只需要在它请求权限时点同意。**
+
+> **为什么强调"装到当前项目"**：dsh 会扫描 `<项目根>/.agents/skills/`，
+> 装在这里**在工作区内，不需要额外授权**；装到全局（`~/.agents/skills/`）会触发沙箱审批。
+> 而且项目级安装**会随项目一起备份/提交**，换机器跟着走。
+
+### 方式二：终端里粘一行
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ice5kysl/live-video/main/install.sh | bash
+```
+
+装到当前项目。想装到全局（本机所有项目可用）加 `-s -- --user`：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ice5kysl/live-video/main/install.sh | bash -s -- --user
+```
+
+### 方式三：npm / skills CLI
+
+```bash
+npm i @ice5kysl/live-video
+npx @ice5kysl/live-video link      # 自动软链到本机所有 harness
+
+# 或者
+npx skills add ice5kysl/live-video
+```
+
+### 装完怎么确认
+
+**重开一个会话**（让助手重新加载技能列表），然后说：
+
+> 用 live-video 帮我做个演示视频
+
+助手能报出这个技能的用法，就是装好了 ✓
+
+### 第一次用之前建议做一次（可选但推荐）
+
+装上免密钥、音质更好的中文语音：
+
+```bash
+python3 .agents/skills/live-video/scripts/synth.py --setup-edge
+```
+
+会自动建一个独立环境装 `edge-tts`，**不动系统 Python**。不装也行 —— 会自动退回系统自带的语音。
+
+---
+
+## 详细安装（进阶）
 
 **本 skill 不挑 harness** —— dsh / Claude Code / Kimi Code / Codex / Cursor / Qwen / Qoder / Trae / OpenCode
 都能用。技能本体是纯脚本，`SKILL.md` 只依赖各家都认的 `name` + `description`。

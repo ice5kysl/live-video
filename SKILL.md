@@ -313,3 +313,42 @@ done
 > **同事的环境布局可能和你不一样** —— 先探测再装。
 > **探测方法、三种安装方式、验证与排查表**，见
 > **[`references/各harness安装指引.md`](./references/各harness安装指引.md)**。
+
+---
+
+## 十、怎么让用户装上（给非技术用户）
+
+**本 skill 没有"一键点安装"的入口** —— dsh 只从文件系统发现 skill，扫这四个目录：
+
+```
+<项目根>/.dsh/skills/      <项目根>/.agents/skills/     ← 项目级
+~/.dsh/skills/             ~/.agents/skills/            ← 全局
+```
+
+### 最省事：让用户把这句话发给他的助手
+
+```text
+帮我装一下 live-video 这个 Agent Skill，装到「当前项目的 .agents/skills/」下面
+（不要装到全局，那样会要权限）。
+来源：https://github.com/ice5kysl/live-video
+装完跑一次 scripts/check-env.sh 确认环境没问题，然后简单告诉我怎么用。
+```
+
+**为什么强调"装到当前项目"**：装进工作区**不触发沙箱审批**（工作区内写入是放行的）；
+装到 `~/.agents/skills/` 属于工作区外操作，助手会请求授权 —— 对非技术用户是多余的摩擦。
+
+而且**项目级安装随项目走**：换机器、备份、交接都跟着。
+
+### 或者一行终端命令
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ice5kysl/live-video/main/install.sh | bash
+# 加 -s -- --user 则装到全局
+```
+
+### 装完必须做的一件事
+
+**让用户重开一个会话** —— skill 列表是在会话启动时加载的，不重开会话助手看不到新技能。
+
+详细对照（含各 harness 目录探测、npm、排查）见
+[`references/各harness安装指引.md`](./references/各harness安装指引.md)。
