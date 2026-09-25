@@ -28,9 +28,25 @@
 
 但**各家的 skill 目录是各自独立的**，需要在你要用的那家目录里放一份（推荐软链）：
 
+### 方式 A：skills CLI（最省事）
+
+```bash
+npx skills add ice5kysl/live-video
+```
+
+### 方式 B：npm
+
+```bash
+npm i @ice5kysl/live-video          # 装进项目
+npx @ice5kysl/live-video check      # 环境自检
+npx @ice5kysl/live-video link       # 自动软链到本机所有 harness
+```
+
+### 方式 C：手动克隆 + 软链
+
 ```bash
 # 1) 拿源码
-git clone <仓库地址> ~/Documents/codes/skills/Live-Video
+git clone https://github.com/ice5kysl/live-video.git ~/Documents/codes/skills/Live-Video
 
 # 2) 给每个要用的 harness 建软链（-n 避免套娃）
 for DIR in ~/.agents/skills ~/.claude/skills ~/.kimi-code/skills ~/.codex/skills \
@@ -39,7 +55,7 @@ for DIR in ~/.agents/skills ~/.claude/skills ~/.kimi-code/skills ~/.codex/skills
 done
 
 # 3) 或者用 skills CLI
-npx skills add <仓库地址>
+npx skills add ice5kysl/live-video
 ```
 
 > **同事的环境布局可能不同** —— 先探测再装。
@@ -131,7 +147,7 @@ Live-Video/
 本 skill 已做过脱敏审计，**不含任何密钥、凭证、个人信息或真实业务数据**。
 若要发布到**公司外部**（公网仓库 / 交给外部团队），只需确认两件事：
 
-1. **仓库地址** —— 本文档里用的是占位符 `<仓库地址>`，替换成你的公网仓库地址即可
+1. **仓库地址** —— 本仓库已公开在 https://github.com/ice5kysl/live-video，可直接引用
 2. **依赖的第三方服务** —— 腾讯云 TTS 需要使用者**自己申请子账号密钥**（不要共用）；
    免密钥的 `edge-tts` 与 macOS `say` 无此问题
 

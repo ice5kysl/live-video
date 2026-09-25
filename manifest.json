@@ -57,5 +57,12 @@
       "quality": "fair",
       "note": "macOS 自带，零配置"
     }
+  },
+  "homepage": "https://github.com/ice5kysl/live-video",
+  "npm": "@ice5kysl/live-video",
+  "install": {
+    "skillsCli": "npx skills add ice5kysl/live-video",
+    "npm": "npm i @ice5kysl/live-video && npx @ice5kysl/live-video link",
+    "git": "git clone https://github.com/ice5kysl/live-video.git"
   }
 }

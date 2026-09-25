@@ -105,7 +105,7 @@ find ~ -maxdepth 4 -type d -name skills 2>/dev/null | grep -v Library | sort
 
 ```bash
 # 1) 拿到源码
-git clone <仓库地址> ~/Documents/codes/skills/Live-Video
+git clone https://github.com/ice5kysl/live-video.git ~/Documents/codes/skills/Live-Video
 
 # 2) 给每个你要用的 harness 建软链（把 <DIR> 换成第三节探测到的目录）
 for DIR in ~/.agents/skills ~/.claude/skills ~/.kimi-code/skills ~/.codex/skills \
@@ -116,13 +116,20 @@ done
 
 > `ln -sfn` 的 `-n` 很重要：目标已是软链时直接替换，不会套娃。
 
-### 方式 B：skills CLI（如果你们的 skill 生态支持）
+### 方式 B：npm（会自带一个 link 命令帮你软链）
 
 ```bash
-npx skills add <仓库地址>
+npm i @ice5kysl/live-video
+npx @ice5kysl/live-video link        # 自动探测并软链到本机所有 harness
 ```
 
-### 方式 C：直接拷贝（最简单，但**改源码后各份不会同步**）
+### 方式 C：skills CLI
+
+```bash
+npx skills add ice5kysl/live-video
+```
+
+### 方式 D：直接拷贝（最简单，但**改源码后各份不会同步**）
 
 ```bash
 cp -R Live-Video ~/.claude/skills/live-video
