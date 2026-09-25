@@ -21,7 +21,7 @@ cd "$(dirname "$0")/.."
 
 FPS="${1:-25}"
 HTML="${HTML:-演示页-视频版.html}"
-OUT="${OUT:-安监-从流程合规到本质安全.mp4}"
+OUT="${OUT:-成片.mp4}"
 A="build/audio"
 mkdir -p "$A"
 
@@ -191,7 +191,7 @@ for st, d, blk, full in zip(tl["start"], tl["dur"], blocks, subs):
     else:
         n += 1
         out.append("%d\n%s --> %s\n%s\n" % (n, ts(st + 0.12), ts(st + d - 0.05), full))
-open(os.environ.get("SRT", "安监-字幕.srt"), "w", encoding="utf-8").write("\n".join(out))
+open(os.environ.get("SRT", "字幕.srt"), "w", encoding="utf-8").write("\n".join(out))
 print("   %d 条字幕" % n)
 PY
 
