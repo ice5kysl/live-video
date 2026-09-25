@@ -1,0 +1,61 @@
+{
+  "name": "live-video",
+  "version": "1.0.0",
+  "description": "把 HTML 页面做成汇报级演示视频（网页当画面 + TTS 当旁白 + 无头浏览器逐帧截图）",
+  "entrypoint": "SKILL.md",
+  "type": "toolchain",
+  "audience": "需要制作演示/汇报视频的开发者与业务人员",
+  "runtime": {
+    "ffmpeg": "需要 libx264 与 aac 编码器（不需要 libass，字幕烧在页面里）",
+    "node": ">= 22（自带 WebSocket，CDP 录屏依赖）",
+    "python": ">= 3.8",
+    "browser": "Google Chrome / Chromium（可用 CHROME_BIN 指定）"
+  },
+  "environment": {
+    "CHROME_BIN": "可选，浏览器可执行文件路径；不设则自动探测各平台常见位置",
+    "TTS_ENV": "可选，TTS 凭证 .env 路径；默认 ~/.config/live-video/.env",
+    "VOICE_ID": "可选，TTS 音色 ID；默认 502005（解说男声）",
+    "SPEED": "可选，语速；默认 0.0（≈5.3 字/秒）",
+    "SILENT": "可选，设为 1 则跳过 TTS，按幕时长生成静音轨（无凭证时跑通链路用）",
+    "TTS_PROVIDER": "可选，auto(默认) | tencent | edge | say；自动选第一个可用的",
+    "VOICE": "可选，音色；不指定则用该 provider 的默认音色",
+    "STRICT": "可选，设为 1 则旁白装不下时报错退出（默认自动延长该幕）"
+  },
+  "preflight": "bash scripts/check-env.sh",
+  "scripts": {
+    "make.sh": "出片主入口：解析时间轴 → TTS → 混音 → 逐帧抓取 → SRT → 编码",
+    "capture.js": "录屏：CDP 逐帧截图",
+    "stills.js": "按时刻抓静帧（改图后核对画面）",
+    "shot_static.js": "静态页整页截图",
+    "check-env.sh": "环境自检",
+    "tencent_tts.py": "腾讯云 TTS 封装",
+    "__chrome.js": "跨平台浏览器探测",
+    "base.css": "基础骨架样式",
+    "synth.py": "统一的语音合成接口（多 provider 自动选择）"
+  },
+  "hardConstraints": [
+    "入场动画只能用 CSS animation + animation-delay:var(--d)，禁用 JS 定时器（录屏定位不到）",
+    "动画门控选择器必须写复合形式 .scene.play.v1s2（同一个元素上的多个类）",
+    "curIdx 必须初始化为 -1（写成 0 会让第一幕永远空白）",
+    "图标一律内嵌 SVG，禁止 emoji（跨系统渲染不一致）",
+    "CSS 写成独立文件，不要塞进 Python f-string 模板",
+    "各 provider 语速不同；make.sh 会自动延长装不下的幕，不要手工硬编码时长"
+  ],
+  "ttsProviders": {
+    "tencent": {
+      "needKey": true,
+      "quality": "best",
+      "note": "腾讯云语音合成，纯标准库实现"
+    },
+    "edge": {
+      "needKey": false,
+      "quality": "good",
+      "note": "edge-tts，需 pip install edge-tts"
+    },
+    "say": {
+      "needKey": false,
+      "quality": "fair",
+      "note": "macOS 自带，零配置"
+    }
+  }
+}

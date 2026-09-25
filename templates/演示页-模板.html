@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>演示视频模板 · 3 幕示例</title>
+<style>
+/* ============================================================================
+   演示视频页面模板
+   —— 这份文件是「最小可运行示例」，照着改就能出自己的片子。
+   规范说明见 ../演示视频制作标准.md
+
+   核心约定（务必遵守，否则录屏对不上）：
+     1. 每一幕是一个 <section class="scene">，带 data-dur / data-vo / data-sub
+     2. 入场动画一律用 CSS animation + animation-delay:var(--d)
+        禁止 setTimeout / requestAnimationFrame（__seek 定位不到）
+     3. 动画门控选择器必须写成复合形式：.scene.play.v1s2（同一个元素上的多个类）
+     4. 图标一律内嵌 SVG，禁止 emoji（跨系统渲染不一致）
+   ============================================================================ */
+
+/* ---------- 基础 ---------- */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f2f8f4; --bg2:#e7f3ec; --panel:#fff; --line:#d8e7de; --line2:#bedccb;
+  --ink:#0b2a1e; --ink2:#1c4632; --muted:#5e7a6c;
+  --acc:#00843d; --acc2:#12a05a; --acc3:#eaf7f0;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:#e9f1ec;
+  font-family:"PingFang SC","Microsoft YaHei","Source Han Sans SC",sans-serif;color:var(--ink)}
+
+/* 预览用：把 1920×1080 的画布缩放到窗口 */
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#deck{position:relative;width:1920px;height:1080px;overflow:hidden;transform-origin:center center}
+
+/* ---------- 幕 ---------- */
+.scene{position:absolute;inset:0;opacity:0;pointer-events:none;
+  background:radial-gradient(1100px 720px at 78% -6%,rgba(0,132,61,.10),transparent 62%),
+             linear-gradient(160deg,#fff 0%,var(--bg) 52%,var(--bg2) 100%)}
+.scene.active{opacity:1;pointer-events:auto}
+.wrap{position:absolute;inset:0;padding:96px 130px 118px}
+
+/* ---------- 幕内骨架 ---------- */
+.s-topbar{display:flex;align-items:center;justify-content:space-between;
+  font-size:19px;letter-spacing:2.4px;color:var(--muted)}
+.s-brand{display:flex;align-items:center;gap:14px}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--acc);
+  box-shadow:0 0 16px rgba(0,132,61,.4)}
+.s-stage{font-weight:700;letter-spacing:3px;color:var(--acc)}
+
+h1{font-size:56px;font-weight:800;line-height:1.24;letter-spacing:-.5px;margin-top:22px}
+h1 em{font-style:normal;color:var(--acc)}
+.sub{font-size:24px;font-weight:600;color:var(--ink2);margin-top:16px}
+
+/* 卡片 */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
+.card{border-radius:16px;background:#fff;border:1px solid var(--line);
+  border-top:4px solid var(--acc);box-shadow:0 14px 34px rgba(6,58,34,.07);
+  padding:26px 28px;text-align:center}
+.card b{display:block;font-size:26px;font-weight:800;color:var(--ink)}
+.card span{display:block;font-size:16px;color:var(--muted);margin-top:9px}
+
+/* 流程链 */
+.chain{display:grid;grid-template-columns:repeat(8,1fr);gap:11px;margin-top:44px}
+.node{border-radius:12px;background:#fff;border:1px solid var(--line);
+  border-top:4px solid var(--acc);box-shadow:0 10px 24px rgba(6,58,34,.07);
+  padding:20px 6px 17px;text-align:center}
+.node i{display:block;font-size:24px;font-weight:800;color:var(--acc);
+  font-style:normal;margin-bottom:4px}
+.node span{font-size:17px;font-weight:700;color:var(--ink2)}
+
+/* ---------- 入场动画（核心） ---------- */
+.au{opacity:0}
+.scene.play .au{animation:au .78s cubic-bezier(.2,.7,.3,1) both;
+  animation-delay:var(--d,0s)}
+@keyframes au{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+
+/* ---------- 字幕条 ---------- */
+#vsub{position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:97;
+  width:1760px;max-width:1760px;text-align:center}
+#vsub .box{display:inline-block;font-size:26px;font-weight:600;letter-spacing:1px;
+  color:#F2FBF6;background:rgba(6,24,16,.84);border:1px solid rgba(47,217,138,.24);
+  border-radius:12px;padding:12px 30px;line-height:1.45;
+  white-space:normal;max-width:1560px;
+  min-width:940px;    /* 关键：防止幕内分段字幕推进时条宽来回跳 */
+  }
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+
+<!-- ======================= 第 1 幕 =======================
+     data-subs 演示「幕内分段字幕」：旁白长于 30 字时用它。
+     时间是「幕内秒数」，用 | 分隔时间与文本、;; 分隔各段。 -->
+<section class="scene active v1s1"
+  data-dur="9.3"
+  data-vo="这是第一幕的旁白，用来演示最基本的用法。这一句比较长，所以字幕要分段跟着说话走。好了，这一幕就讲这些。"
+  data-sub="这是第一幕的旁白，用来演示最基本的用法。这一句比较长，所以字幕要分段跟着说话走。好了，这一幕就讲这些。"
+  data-subs="0.30|这是第一幕的旁白，用来演示最基本的用法。
+         ;;3.50|这一句比较长，所以字幕要分段跟着说话走。
+         ;;6.64|好了，这一幕就讲这些。">
+  <div class="wrap">
+    <div class="s-topbar au" style="--d:.05s">
+      <div class="s-brand"><span class="dot"></span><span>模板示例 · 第一幕</span></div>
+      <div class="s-stage">基 础 用 法</div>
+    </div>
+    <h1 class="au" style="--d:.12s">一幕 = 一个 <em>section</em>，一份时长与旁白</h1>
+    <div class="sub au" style="--d:.22s">改台词只改 data-vo，改节奏只改 data-dur</div>
+    <div class="cards">
+      <div class="card au" style="--d:.42s"><b>data-dur</b><span>这一幕的总时长（秒）</span></div>
+      <div class="card au" style="--d:.56s"><b>data-vo</b><span>送 TTS 合成的旁白</span></div>
+      <div class="card au" style="--d:.70s"><b>data-sub</b><span>烧入画面的字幕</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 2 幕 =======================
+     演示 8 节点流程链 + 错落入场 -->
+<section class="scene v1s2"
+  data-dur="7.3"
+  data-vo="第二幕演示逐项入场的动画。每个元素的延迟写在 --d 上，录屏时会被逐帧精确定位。"
+  data-sub="第二幕演示逐项入场的动画。每个元素的延迟写在 --d 上，录屏时会被逐帧精确定位。">
+  <div class="wrap">
+    <div class="s-topbar au" style="--d:.05s">
+      <div class="s-brand"><span class="dot"></span><span>模板示例 · 第二幕</span></div>
+      <div class="s-stage">动 画 机 制</div>
+    </div>
+    <h1 class="au" style="--d:.12s">入场动画一律用 <em>CSS animation</em></h1>
+    <div class="chain">
+      <div class="node au" style="--d:.40s"><i>①</i><span>计划编制</span></div>
+      <div class="node au" style="--d:.51s"><i>②</i><span>计划审批</span></div>
+      <div class="node au" style="--d:.62s"><i>③</i><span>现场勘察</span></div>
+      <div class="node au" style="--d:.73s"><i>④</i><span>方案编审</span></div>
+      <div class="node au" style="--d:.84s"><i>⑤</i><span>开工许可</span></div>
+      <div class="node au" style="--d:.95s"><i>⑥</i><span>现场实施</span></div>
+      <div class="node au" style="--d:1.06s"><i>⑦</i><span>验收闭环</span></div>
+      <div class="node au" style="--d:1.17s"><i>⑧</i><span>督查考核</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 第 3 幕 =======================
+     演示内嵌 SVG 图标（禁止 emoji） -->
+<section class="scene v1s3"
+  data-dur="7.2"
+  data-vo="第三幕演示图标规范。所有图标都用内嵌的 SVG，这样在任何系统上渲染都一致。"
+  data-sub="第三幕演示图标规范。所有图标都用内嵌的 SVG，这样在任何系统上渲染都一致。">
+  <div class="wrap">
+    <div class="s-topbar au" style="--d:.05s">
+      <div class="s-brand"><span class="dot"></span><span>模板示例 · 第三幕</span></div>
+      <div class="s-stage">图 标 规 范</div>
+    </div>
+    <h1 class="au" style="--d:.12s">图标一律内嵌 <em>SVG</em>，禁止 emoji</h1>
+    <div class="cards">
+      <div class="card au" style="--d:.40s">
+        <svg viewBox="0 0 48 48" style="width:56px;height:56px">
+          <rect x="10" y="9" width="28" height="33" rx="5" fill="#eaf7f0" stroke="#00843d" stroke-width="2.4"/>
+          <rect x="18" y="5" width="12" height="7.5" rx="2.8" fill="#dff3e8" stroke="#00843d" stroke-width="2.4"/>
+          <path d="M17 21h14M17 28h14M17 35h9" stroke="#00843d" stroke-width="2.4" stroke-linecap="round"/>
+        </svg>
+        <b style="margin-top:14px">清单文档</b><span>用 path / rect 手绘</span>
+      </div>
+      <div class="card au" style="--d:.56s">
+        <svg viewBox="0 0 48 48" style="width:56px;height:56px">
+          <circle cx="21" cy="21" r="12.5" fill="#eaf7f0" stroke="#00843d" stroke-width="2.6"/>
+          <path d="M30.5 30.5l9 9" stroke="#00843d" stroke-width="3.4" stroke-linecap="round"/>
+        </svg>
+        <b style="margin-top:14px">放大镜</b><span>stroke 统一取主题色</span>
+      </div>
+      <div class="card au" style="--d:.72s">
+        <svg viewBox="0 0 48 48" style="width:56px;height:56px">
+          <path d="M24 5.5l15 5.4v12c0 9-6.2 15.7-15 18.3-8.8-2.6-15-9.3-15-18.3v-12z"
+                fill="#eaf7f0" stroke="#00843d" stroke-width="2.6"/>
+          <path d="M17.4 24.4l5 5 9-10" fill="none" stroke="#00843d" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <b style="margin-top:14px">盾牌对勾</b><span>currentColor 可继承配色</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div></div>
+
+<div id="vsub"><div class="box" id="vsubtext"></div></div>
+
+<script>
+/* ============================================================================
+   录屏引擎：__seek(t)
+   capture.js 对每一帧调用它，把页面精确定位到第 t 秒的状态。
+   原理：找到当前幕 → 切换 .active/.play → 把幕内所有 CSS 动画「暂停」，
+        再把 currentTime 设成「幕内时间 × 1000」。
+   这也是为什么入场动画必须用 CSS animation —— 只有它能被这样定位。
+   ============================================================================ */
+(function(){
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  var DURS   = scenes.map(function(s){ return parseFloat(s.getAttribute('data-dur')) || 0; });
+  var vsub   = document.getElementById('vsub');
+  var vstx   = document.getElementById('vsubtext');
+  var curIdx = -1;   /* 必须是 -1 而不是 0：否则 t=0 时 idx===curIdx，
+                        第一幕不会走「切幕」分支，.play 加不上，
+                        动画不触发，第一幕内容永远是 opacity:0 */
+
+  function subOf(sc){ return sc.getAttribute('data-sub') || sc.getAttribute('data-vo') || ''; }
+
+  /* 幕内分段字幕：data-subs="0.30|第一句;;3.20|第二句"（时间为幕内秒数）
+     没有配 data-subs 的幕，退回整幕一条。 */
+  function subAt(sc, local){
+    var spec = sc.getAttribute('data-subs');
+    if (!spec) return subOf(sc);
+    var segs = spec.split(';;'), txt = '';
+    for (var i = 0; i < segs.length; i++){
+      var b = segs[i].indexOf('|');
+      if (b < 0) continue;
+      if (local >= parseFloat(segs[i].slice(0, b))) txt = segs[i].slice(b + 1).trim();
+    }
+    return txt || subOf(sc);
+  }
+
+  window.__seek = function(t){
+    // 1) 定位到第几幕、幕内时间
+    var acc = 0, idx = scenes.length - 1, local = 0;
+    for (var k = 0; k < DURS.length; k++){
+      if (t < acc + DURS[k]) { idx = k; local = t - acc; break; }
+      acc += DURS[k];
+      if (k === DURS.length - 1) { idx = k; local = DURS[k]; }
+    }
+    var cur = scenes[idx];
+
+    // 2) 切幕
+    if (idx !== curIdx){
+      scenes.forEach(function(s, k){
+        s.classList.toggle('active', k === idx);
+        s.classList.remove('play');
+      });
+      void cur.offsetWidth;          // 强制重排，让动画从头开始
+      cur.classList.add('play');
+      curIdx = idx;
+      if (vstx) vstx.textContent = subAt(cur, local);
+    }
+
+    // 3) 每帧更新字幕（分段字幕靠这句推进）
+    if (vstx) vstx.textContent = subAt(cur, local);
+
+    // 4) 把幕内所有动画暂停并定位到 local
+    void cur.offsetWidth;
+    var anims = cur.getAnimations({subtree: true});
+    for (var j = 0; j < anims.length; j++){
+      try { anims[j].pause(); anims[j].currentTime = local * 1000; } catch(e){}
+    }
+  };
+
+  window.__durs = DURS;
+
+  // 浏览器里预览用：把 1920×1080 缩放到窗口
+  function fit(){
+    var s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    document.getElementById('deck').style.transform = 'scale(' + s + ')';
+  }
+  addEventListener('resize', fit); fit();
+
+  // 浏览器预览：空格/方向键翻幕
+  var t = 0;
+  function goto(i){
+    i = Math.max(0, Math.min(DURS.length - 1, i));
+    t = DURS.slice(0, i).reduce(function(a,b){ return a+b; }, 0) + 0.01;
+    window.__seek(t);
+  }
+  var pos = 0;
+  addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === ' '){ pos = Math.min(DURS.length-1, pos+1); goto(pos); }
+    if (e.key === 'ArrowLeft'){ pos = Math.max(0, pos-1); goto(pos); }
+  });
+
+  window.__seek(0);
+})();
+</script>
+</body>
+</html>

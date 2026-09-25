@@ -1,0 +1,307 @@
+/* ============================================================================
+   演示页 V2 · 新增样式
+   全部类名以 v2 前缀，避免与既有设计系统（.cb / .sc2 / .pf / .c3 ...）撞名
+   ============================================================================ */
+
+/* ---------- 通用：自定义动画（不走 .au/.al 那套，靠 --d 控延迟） ---------- */
+.scene.play .v2-harr      {animation:v2grow .5s ease both;animation-delay:var(--d,0s)}
+.scene.play .v2-dline     {animation:v2grow 8.6s linear both;animation-delay:.45s}
+.scene.play .v2-form-x    {animation:v2cross .55s cubic-bezier(.2,.7,.3,1) both;animation-delay:var(--d,0s)}
+.scene.play .v2-strike    {animation:v2strike .5s ease both;animation-delay:var(--d,0s)}
+.scene.play .v2-zoom      {animation:v2pan var(--vd,9s) linear both}
+.scene.play .v2-hud .h1   {animation:v2hud1 var(--vd,9s) linear both}
+.scene.play .v2-hud .h2   {animation:v2hud2 var(--vd,9s) linear both}
+.scene.play .v2-hud .h3   {animation:v2hud3 var(--vd,9s) linear both}
+@keyframes v2grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes v2cross{from{transform:scaleX(0) rotate(-8deg);opacity:0}to{transform:scaleX(1) rotate(-8deg);opacity:1}}
+@keyframes v2strike{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes v2pan{
+  0%,10%   {transform:translateY(0)}
+  36%,50%  {transform:translateY(calc(var(--pan) / 2))}
+  80%,100% {transform:translateY(var(--pan))}}
+@keyframes v2hud1{0%,4%{opacity:0}9%,28%{opacity:1}33%,100%{opacity:0}}
+@keyframes v2hud2{0%,36%{opacity:0}41%,60%{opacity:1}65%,100%{opacity:0}}
+@keyframes v2hud3{0%,68%{opacity:0}73%,100%{opacity:1}}
+
+/* ---------- 幕01 开篇 · 业务规模 ---------- */
+.v2s1 .v2-open{position:absolute;left:130px;right:130px;top:296px;display:flex;align-items:center;justify-content:space-between}
+.v2-open-k{font-size:22px;letter-spacing:6px;font-weight:700;color:var(--l-acc)}
+.v2-open-num{display:flex;align-items:baseline;gap:10px;margin-top:22px}
+.v2-open-num i{font-style:normal;font-size:60px;font-weight:800;color:var(--l-acc);line-height:1}
+.v2-numwin{display:block;height:148px;overflow:hidden}
+.v2-numstrip{display:flex;flex-direction:column;height:700%;animation:v2count 1.5s steps(6) both;animation-delay:.42s}
+.v2-numstrip span{flex:0 0 14.2857%;display:flex;align-items:center;font-size:148px;font-weight:800;
+  color:var(--l-ink);letter-spacing:-4px;line-height:1;white-space:nowrap}
+@keyframes v2count{from{transform:translateY(0)}to{transform:translateY(-85.7143%)}}
+.v2-open-lab{font-size:25px;font-weight:600;color:var(--l-muted);margin-top:16px;letter-spacing:5px}
+.v2-open-r{display:flex;gap:26px}
+.v2-stat{width:252px;border-radius:20px;background:#fff;border:1px solid var(--l-line);border-top:5px solid var(--l-acc);
+  padding:40px 24px;text-align:center;box-shadow:0 16px 40px rgba(6,58,34,.09)}
+.v2-stat b{display:block;font-size:94px;font-weight:800;color:var(--l-acc);line-height:1;letter-spacing:-2px}
+.v2-stat span{display:block;font-size:25px;color:var(--l-ink2);font-weight:600;margin-top:16px;letter-spacing:3px}
+
+/* ---------- 幕02 现有基础（甬道图 + 打勾） ---------- */
+.v2-ck{height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;
+  font-size:17px;font-weight:800;color:#fff;background:var(--l-acc);box-shadow:0 6px 16px rgba(0,132,61,.22)}
+
+/* ---------- 幕03 痛点一 · 制度繁杂 ---------- */
+.v2s3 .v2-pain{display:grid;grid-template-columns:500px 68px 1fr;gap:0;align-items:center;margin-top:34px}
+.v2-pain-l{display:flex;flex-direction:column;gap:11px}
+.v2-doc{border-radius:12px;background:#fff;border:1px solid var(--l-line);border-left:4px solid #A1A1AA;
+  padding:13px 18px;box-shadow:0 8px 20px rgba(6,58,34,.05)}
+.v2-doc b{font-size:17px;font-weight:800;color:var(--l-ink);margin-right:10px}
+.v2-doc span{font-size:15px;color:var(--l-muted)}
+.v2-pain-c{text-align:center;font-size:34px;color:#C4D3CB}
+.v2-pain-r{position:relative}
+.v2-panel{border:1px solid var(--l-line);border-radius:16px;background:#fff;overflow:hidden;
+  box-shadow:0 16px 40px rgba(6,58,34,.09)}
+.v2-panel-h{display:flex;align-items:center;gap:10px;padding:13px 20px;border-bottom:1px solid #F0F0F2;
+  background:#FAFAFA;font-size:16px;font-weight:700;color:var(--l-ink)}
+.v2-panel-h i{width:9px;height:9px;border-radius:50%;background:var(--l-acc);display:block}
+.v2-panel-h span{margin-left:auto;font-size:14px;font-weight:400;color:var(--l-muted)}
+.v2-rulewin{height:300px;overflow:hidden;position:relative}
+.v2-rulewin::after{content:"";position:absolute;left:0;right:0;bottom:0;height:76px;
+  background:linear-gradient(180deg,rgba(255,255,255,0),#fff)}
+.v2-rulelist{animation:v2rulescroll 5.8s linear both;animation-delay:.55s}
+.v2-rule{font-size:15.5px;color:var(--l-ink2);padding:11px 20px;border-bottom:1px solid #F4F6F5;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scene.play .v2-rulelist{animation:v2rulescroll 5.8s linear both;animation-delay:.55s}
+@keyframes v2rulescroll{from{transform:translateY(0)}to{transform:translateY(-196px)}}
+.v2-ask{margin-top:16px;display:inline-block;font-size:22px;font-weight:700;color:#B5342A;
+  background:var(--l-risk-bg);border:1px solid #EEC9C3;border-radius:12px;padding:14px 26px}
+
+/* ---------- 幕04 痛点二 · 执行打折扣 ---------- */
+.v2s4 .v2-chain{display:grid;grid-template-columns:repeat(8,1fr);gap:12px;margin-top:40px}
+.v2-node{position:relative;border-radius:12px;background:#fff;border:1px solid var(--l-line);
+  border-top:4px solid var(--l-acc);padding:18px 6px 16px;text-align:center;box-shadow:0 10px 24px rgba(6,58,34,.06)}
+.v2-node b{position:absolute;right:9px;top:9px;width:22px;height:22px;border-radius:50%;background:var(--l-acc);
+  color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
+.v2-node span{font-size:15px;font-weight:600;color:var(--l-ink2)}
+.v2-chain2{display:grid;grid-template-columns:repeat(8,1fr);gap:12px;margin-top:16px}
+.v2-openbox{grid-column:3 / span 4;position:relative;border-radius:14px;background:#fff;
+  border:1.5px dashed #C9A0A0;padding:18px 22px;box-shadow:0 14px 34px rgba(6,58,34,.08)}
+.v2-openbox::before{content:"";position:absolute;left:34px;top:-15px;width:0;height:0;
+  border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:15px solid #C9A0A0}
+.v2-ob-h{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-size:15.5px;font-weight:700;color:var(--l-ink)}
+.v2-ob-h i{font-style:normal;font-size:13px;font-weight:700;color:#B5342A;background:var(--l-risk-bg);
+  border:1px solid #EEC9C3;border-radius:999px;padding:3px 12px;white-space:nowrap}
+.v2-ob-blank{margin-top:14px;height:92px;border-radius:10px;
+  background:repeating-linear-gradient(135deg,#F8FBF9,#F8FBF9 11px,#F1F5F3 11px,#F1F5F3 22px);
+  display:flex;flex-direction:column;justify-content:center;gap:11px;padding:0 20px}
+.v2-ob-line{height:9px;border-radius:5px;background:#E3EAE6;width:100%}
+.v2-ob-line.s{width:56%}
+.v2-ob-t{margin-top:12px;font-size:15px;color:var(--l-muted)}
+.v2-ob-t b{color:#B5342A;font-weight:700}
+
+/* ---------- 幕05 痛点三 · 报送慢 ---------- */
+.v2s5 .v2-esc{display:flex;align-items:center;justify-content:center;margin-top:86px}
+.v2-hop{flex:0 0 216px;border-radius:14px;background:#fff;border:1px solid var(--l-line);
+  border-top:4px solid #A1A1AA;padding:22px 10px;text-align:center;box-shadow:0 12px 28px rgba(6,58,34,.07)}
+.v2-hop:first-child{border-top-color:var(--l-acc)}
+.v2-hop:last-of-type{border-top-color:#B5342A}
+.v2-hop b{display:block;font-size:21px;font-weight:700;color:var(--l-ink)}
+.v2-hop span{display:block;font-size:26px;font-weight:800;color:var(--l-muted);margin-top:8px;
+  font-variant-numeric:tabular-nums}
+.v2-hop:last-of-type span{color:#B5342A}
+.v2-harr{flex:0 0 58px;height:3px;border-radius:3px;transform-origin:left center;
+  background:linear-gradient(90deg,#D5E1DA,#B5342A)}
+.v2-reddot{width:20px;height:20px;border-radius:50%;background:#B5342A;margin-left:16px;
+  box-shadow:0 0 0 9px rgba(181,52,42,.16)}
+.v2-esclab{margin-top:34px;text-align:center;font-size:24px;font-weight:700;color:#B5342A}
+
+/* ---------- 幕06 三痛点 → 三路径 ---------- */
+.v2s6 .v2-mhead{display:grid;grid-template-columns:520px 68px 1fr;margin-top:34px;
+  font-size:15px;font-weight:800;letter-spacing:3px;color:var(--l-muted)}
+.v2-map{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.v2-mrow{display:grid;grid-template-columns:520px 68px 1fr;align-items:center}
+.v2-mp{border-radius:14px;background:#fff;border:1px solid var(--l-line);border-left:5px solid #C9A0A0;
+  padding:15px 20px;box-shadow:0 8px 22px rgba(6,58,34,.05)}
+.v2-mp b{display:inline-block;font-size:12px;font-weight:800;color:#B5342A;background:var(--l-risk-bg);
+  border:1px solid #EEC9C3;border-radius:999px;padding:2px 10px;margin-right:10px;vertical-align:2px}
+.v2-mt{font-size:18px;font-weight:700;color:var(--l-ink)}
+.v2-md{display:block;font-size:14px;color:var(--l-muted);margin-top:5px;padding-left:2px}
+.v2-ma{text-align:center;font-size:26px;color:#C4D3CB}
+.v2-mr{border-radius:14px;background:linear-gradient(90deg,#F1FAF5,#fff 70%);border:1px solid var(--l-line);
+  border-left:5px solid var(--l-acc);padding:15px 22px;box-shadow:0 8px 22px rgba(6,58,34,.05)}
+.v2-mr b{display:block;font-size:19px;font-weight:800;color:#00662F}
+.v2-mr span{display:block;font-size:14.5px;color:var(--l-ink2);margin-top:5px}
+
+/* ---------- 幕07 系统怎么组成 ---------- */
+.v2s7 .v2-sys{display:grid;grid-template-columns:1fr 56px 1fr 56px 1fr;align-items:stretch;margin-top:52px}
+.v2-scard{border-radius:16px;background:#fff;border:1px solid var(--l-line);border-top:5px solid var(--l-acc);
+  padding:28px 26px;box-shadow:0 14px 34px rgba(6,58,34,.07);display:flex;flex-direction:column}
+.v2-sn{font-size:14px;font-weight:800;letter-spacing:2px;color:#A1A1AA}
+.v2-st{font-size:27px;font-weight:800;color:var(--l-ink);margin-top:12px;line-height:1.3}
+.v2-sd{font-size:16px;color:var(--l-muted);margin-top:12px;line-height:1.6}
+.v2-stags{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:20px}
+.v2-stags span{font-size:14px;color:var(--l-acc);background:var(--l-acc3);border:1px solid var(--l-line2);
+  border-radius:8px;padding:6px 12px}
+.v2-sarr{display:flex;align-items:center;justify-content:center;font-size:28px;color:#A9C4B4}
+.v2-snote{margin-top:30px;text-align:center;font-size:19px;color:var(--l-muted)}
+.v2-snote b{color:var(--l-acc);font-weight:700}
+
+/* ---------- 幕08 边界与减负 ---------- */
+.v2s8 .v2-flow{display:grid;grid-template-columns:360px 80px 470px 80px 1fr;align-items:center;margin-top:58px}
+.v2-flow-l{display:flex;flex-direction:column;gap:12px}
+.v2-syscard{display:flex;align-items:center;gap:16px;border-radius:13px;background:#fff;
+  border:1px solid var(--l-line);padding:15px 20px;box-shadow:0 8px 22px rgba(6,58,34,.05)}
+.v2-syscard i{font-style:normal;flex:0 0 74px;height:40px;border-radius:9px;background:var(--l-acc);
+  color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.v2-syscard span{font-size:19px;font-weight:600;color:var(--l-ink2)}
+.v2-flow-note{margin-top:6px;font-size:15px;color:var(--l-muted);text-align:center;letter-spacing:1px}
+.v2-flow-a{text-align:center;font-size:34px;color:#8FCBAB}
+.v2-flow-c{display:flex;justify-content:center}
+.v2-hub{border-radius:18px;background:linear-gradient(135deg,#00662F,#12A05A);color:#fff;
+  padding:34px 34px;text-align:center;box-shadow:0 20px 46px rgba(0,132,61,.28);width:100%}
+.v2-hub b{display:block;font-size:29px;font-weight:800;letter-spacing:1px}
+.v2-hub span{display:block;font-size:16px;color:#CFE9D8;margin-top:12px;letter-spacing:2px}
+.v2-noform{text-align:center}
+.v2-form{position:relative;width:230px;margin:0 auto;border-radius:12px;background:#fff;
+  border:1.5px dashed #C9A0A0;padding:20px 22px;box-shadow:0 10px 26px rgba(6,58,34,.06)}
+.v2-form-h{height:11px;border-radius:6px;background:#E3EAE6;width:64%}
+.v2-form-r{height:9px;border-radius:5px;background:#EDF1EF;margin-top:13px}
+.v2-form-r.s{width:74%}
+.v2-form-x{position:absolute;left:14px;right:14px;top:50%;height:5px;border-radius:3px;background:#B5342A;
+  transform-origin:left center}
+.v2-form-t{margin-top:18px;font-size:25px;font-weight:800;color:#B5342A;letter-spacing:1px}
+.v2-form-d{margin-top:8px;font-size:15px;color:var(--l-muted)}
+
+/* ---------- 幕09 典型一天 ---------- */
+.v2s9 .v2-daxis{position:relative;display:grid;grid-template-columns:repeat(4,1fr);margin-top:30px;padding-top:6px}
+.v2-dline{position:absolute;left:0;right:0;top:20px;height:2px;transform-origin:left center;
+  background:linear-gradient(90deg,rgba(0,132,61,.5),rgba(0,132,61,.15))}
+.v2-dnode{position:relative;text-align:center}
+.v2-dnode i{display:block;width:13px;height:13px;border-radius:50%;background:var(--l-acc);margin:0 auto;
+  box-shadow:0 0 0 6px rgba(0,132,61,.12);position:relative;z-index:2}
+.v2-dnode span{display:block;font-size:18px;font-weight:700;color:var(--l-ink2);margin-top:14px;letter-spacing:1px}
+.v2-day{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px}
+.v2-dcol{border-radius:15px;background:#fff;border:1px solid var(--l-line);border-top:4px solid var(--l-acc);
+  padding:20px 20px 22px;box-shadow:0 12px 30px rgba(6,58,34,.06)}
+.v2-dcol:nth-child(2){border-top-color:#2563EB}
+.v2-dcol:nth-child(3){border-top-color:#D97706}
+.v2-dcol:nth-child(4){border-top-color:#7C3AED}
+.v2-dtag{display:inline-block;font-size:13px;font-weight:800;letter-spacing:2px;color:var(--l-acc);
+  background:var(--l-acc3);border-radius:999px;padding:4px 14px}
+.v2-dcol:nth-child(2) .v2-dtag{color:#1D4ED8;background:#EEF2FF}
+.v2-dcol:nth-child(3) .v2-dtag{color:#B45309;background:#FEF3C7}
+.v2-dcol:nth-child(4) .v2-dtag{color:#6D28D9;background:#F3E8FF}
+.v2-dcol ul{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:11px}
+.v2-dcol li{font-size:16px;line-height:1.5;color:var(--l-ink2);padding-left:16px;position:relative}
+.v2-dcol li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:2px;background:var(--l-acc2)}
+
+/* ---------- 幕10 真实案例走查 ---------- */
+.v2-case{display:grid;grid-template-columns:520px 1fr;gap:42px;margin-top:22px;align-items:start}
+.v2-case-l{display:flex;flex-direction:column;gap:8px}
+.v2-cnode{display:flex;align-items:center;gap:12px;border-radius:11px;background:#fff;border:1px solid var(--l-line);
+  padding:11px 16px;box-shadow:0 6px 16px rgba(6,58,34,.04)}
+.v2-cnode b{flex:0 0 26px;font-size:15px;font-weight:800;color:var(--l-muted)}
+.v2-cnode span{font-size:16px;color:var(--l-ink2);font-weight:600}
+.v2-cnode.hi{border-color:#8FCBAB;background:linear-gradient(90deg,#F1FAF5,#fff 70%);box-shadow:0 10px 24px rgba(0,132,61,.12)}
+.v2-cnode.hi b,.v2-cnode.hi span{color:#00662F}
+.v2-cnode.wait{opacity:.55}
+.v2-hl{margin-top:14px;border-radius:12px;background:var(--l-acc3);border:1px solid var(--l-line2);
+  padding:15px 20px;font-size:17px;color:var(--l-ink2)}
+.v2-hl b{color:#00662F;font-weight:800}
+.v2-win{border-radius:14px;border:1px solid var(--l-line);background:#fff;overflow:hidden;
+  box-shadow:0 20px 48px rgba(6,58,34,.13)}
+.v2-win-bar{height:42px;background:#F3F7F5;border-bottom:1px solid var(--l-line);display:flex;align-items:center;
+  gap:8px;padding:0 18px}
+.v2-win-bar i{width:11px;height:11px;border-radius:50%;background:#D6E2DA;display:block}
+.v2-win-bar span{margin-left:14px;font-size:14.5px;color:#7A9186;letter-spacing:.3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v2-view{position:relative;overflow:hidden;background:#fff;height:var(--vh,480px)}
+.v2-zoom{position:absolute;top:0;left:-25%;width:150%;transform-origin:center top}
+.v2-zoom img{display:block;width:100%;height:auto}
+.v2-hud{position:relative;height:44px;background:#F3F7F5;border-bottom:1px solid #D8E7DE;
+  display:flex;align-items:center;justify-content:center;pointer-events:none}
+.v2-hud span{position:absolute;left:0;right:0;text-align:center;font-size:16px;font-weight:700;
+  color:#00662F;opacity:0;letter-spacing:.5px}
+.v2-hud::before{content:"当前取景";position:absolute;left:18px;font-size:12.5px;font-weight:700;
+  letter-spacing:2px;color:#8CA79A}
+
+/* ---------- 幕11 / 幕12 两个已验证场景 ---------- */
+.v2-scn{display:grid;grid-template-columns:520px 1fr;gap:42px;margin-top:26px;align-items:start}
+.v2-scn-l{display:flex;flex-direction:column;gap:11px}
+.v2-step{display:flex;gap:16px;border-radius:13px;background:#fff;border:1px solid var(--l-line);
+  border-left:5px solid var(--l-acc);padding:15px 20px;box-shadow:0 8px 22px rgba(6,58,34,.05)}
+.v2-step.blue{border-left-color:#2563EB}
+.v2-step b{flex:0 0 30px;font-size:19px;font-weight:800;color:var(--l-acc);line-height:1.3}
+.v2-step.blue b{color:#2563EB}
+.v2-step-t{display:block;font-size:18.5px;font-weight:700;color:var(--l-ink);line-height:1.35}
+.v2-step-d{display:block;font-size:14px;color:var(--l-muted);margin-top:5px;line-height:1.5}
+.v2-badge-ok{align-self:flex-start;margin-top:6px;font-size:15px;font-weight:800;color:#00662F;
+  background:var(--l-acc3);border:1px solid var(--l-line2);border-radius:999px;padding:9px 22px;letter-spacing:1px}
+
+/* ---------- 幕13 人机分工 ---------- */
+.v2s13 .coop{margin-top:44px}
+.v2s13 .pluscol{font-size:34px;color:#D5E1DA}
+.v2-redline{margin-top:34px;border-radius:14px;background:linear-gradient(90deg,#00662F,#00843D);color:#fff;
+  padding:20px 34px;font-size:19px;text-align:center;letter-spacing:.6px;
+  box-shadow:0 16px 38px rgba(0,132,61,.24)}
+.v2-redline b{color:#FFE7A8;font-weight:800}
+
+/* ---------- 幕14 落点 ---------- */
+.v2s14 .big{font-size:130px;margin-top:20px}
+.v2s14 .path{margin-top:40px}
+.v2s14 .sig{margin-top:46px}
+.v2-strikes{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:26px}
+.v2-strikes span{position:relative;font-size:20px;color:#93A79C;background:#fff;border:1px solid var(--l-line);
+  border-radius:999px;padding:9px 24px;letter-spacing:1px}
+.v2-strikes span::after{content:"";position:absolute;left:16px;right:16px;top:50%;height:2.5px;
+  border-radius:2px;background:#B5342A;transform-origin:left center}
+.scene.play .v2-strikes span::after{animation:v2strike .5s ease both;animation-delay:var(--d,0s)}
+
+/* ============================================================================
+   修订 1 · 版面填充：顶栏脱离文档流，其余内容在安全区内垂直居中
+   （原版内容偏上，下方留出 170~200px 空带）
+   ============================================================================ */
+.v2s2 .wrap,.v2s3 .wrap,.v2s4 .wrap,.v2s5 .wrap,.v2s6 .wrap,.v2s7 .wrap,
+.v2s8 .wrap,.v2s9 .wrap,.v2s10 .wrap,.v2s11 .wrap,.v2s12 .wrap,.v2s13 .wrap{
+  display:flex;flex-direction:column;justify-content:center}
+.v2s2 .s-topbar,.v2s3 .s-topbar,.v2s4 .s-topbar,.v2s5 .s-topbar,.v2s6 .s-topbar,
+.v2s7 .s-topbar,.v2s8 .s-topbar,.v2s9 .s-topbar,.v2s10 .s-topbar,.v2s11 .s-topbar,
+.v2s12 .s-topbar,.v2s13 .s-topbar{position:absolute;top:96px;left:130px;right:130px}
+
+/* ============================================================================
+   修订 2 · 幕10：整页不裁切展示（16:9 原图铺满），用移动取景框引导视线
+   ============================================================================ */
+.v2-focus{position:absolute;left:1.5%;top:10.5%;width:46.5%;height:9%;border:2.5px solid var(--l-acc);
+  border-radius:8px;box-shadow:0 0 0 9999px rgba(6,24,16,.26);pointer-events:none;opacity:0;z-index:3}
+.scene.play .v2-focus{animation:v2focus10 var(--vd,9.3s) linear both}
+@keyframes v2focus10{
+  0%      {opacity:0;left:1.5%;top:13.5%;width:53.5%;height:11.5%}
+  6%,28%  {opacity:1;left:1.5%;top:13.5%;width:53.5%;height:11.5%}
+  36%,52% {opacity:1;left:1.5%;top:69.5%;width:97%;height:8%}
+  62%,86% {opacity:1;left:1.5%;top:77%;width:97%;height:13%}
+  94%,100%{opacity:0;left:1.5%;top:77%;width:97%;height:13%}}
+
+/* ============================================================================
+   修订 3 · 幕11/12：竖版长页用「相机」平移取景（1.12 倍，左对齐），
+   裁掉右侧留白，既放大可读又不丢左侧正文
+   ============================================================================ */
+.v2-cam{position:absolute;top:0;left:0;width:100%;transform-origin:0 0}
+.v2-cam img{display:block;width:100%;height:auto}
+.scene.play .v2-cam.c11{animation:v2cam11 var(--vd,11.7s) linear both}
+.scene.play .v2-cam.c12{animation:v2cam12 var(--vd,11.1s) linear both}
+@keyframes v2cam11{
+  0%,10%   {transform:scale(1.12) translate(0,0)}
+  36%,50%  {transform:scale(1.12) translate(0,-24%)}
+  80%,100% {transform:scale(1.12) translate(0,-48%)}}
+@keyframes v2cam12{
+  0%,10%   {transform:scale(1.12) translate(0,0)}
+  36%,50%  {transform:scale(1.12) translate(0,-22%)}
+  80%,100% {transform:scale(1.12) translate(0,-45%)}}
+
+/* 修订 4 · 幕10 整页图铺满视窗（原先漏了 width 规则，图片按 1600×900 原生尺寸
+   溢出，视窗只露出左上角 64%，取景框因此对不上任何目标区域） */
+.v2-fullimg{display:block;width:100%;height:auto}
+
+/* 修订 5 · 幕10 改为与幕11/12 一致的「纵向相机」：
+   视窗 520px、图片 1026×577，纯纵向平移 57px（-9.9%）——
+   既不裁宽度，又能把页面最底部的「环节③ 逐项规则明细 / 制度文号」从字幕带后移出来 */
+.scene.play .v2-cam.c10{animation:v2cam10 var(--vd,9.3s) linear both}
+@keyframes v2cam10{
+  0%,12%   {transform:translate(0,0)}
+  40%,56%  {transform:translate(0,-8%)}
+  84%,100% {transform:translate(0,-16.5%)}}
